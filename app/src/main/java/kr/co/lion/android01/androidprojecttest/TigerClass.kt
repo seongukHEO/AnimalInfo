@@ -3,20 +3,27 @@ package kr.co.lion.android01.androidprojecttest
 import android.os.Parcel
 import android.os.Parcelable
 
-class TigerClass(var name:String?, var age:Int, var stripe:Int, var weight:Int) : Parcelable {
+class TigerClass(
+    override var name: String?,
+    override var age: Int,
+    override var uriImage: Int = R.drawable.tiger,
+    var stripe:Int,
+    var weight:Double) : AnimalClass(name, age, uriImage), Parcelable{
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readInt(),
         parcel.readInt(),
-        parcel.readInt()
+        parcel.readInt(),
+        parcel.readDouble()
     ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
         parcel.writeInt(age)
+        parcel.writeInt(uriImage)
         parcel.writeInt(stripe)
-        parcel.writeInt(weight)
+        parcel.writeDouble(weight)
     }
 
     override fun describeContents(): Int {

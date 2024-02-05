@@ -11,6 +11,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import kr.co.lion.android01.androidprojecttest.databinding.ActivityMainBinding
 import kr.co.lion.android01.androidprojecttest.databinding.RowMainBinding
@@ -21,6 +22,9 @@ class MainActivity : AppCompatActivity() {
 
     //animalInput을 받을 런쳐
     lateinit var animalInputActivitylauncher:ActivityResultLauncher<Intent>
+
+    //animalInfo를 받은 런쳐
+    lateinit var animalInfoActivitylauncher:ActivityResultLauncher<Intent>
 
     //사자
     var lionList = mutableListOf<LionClass>()
@@ -35,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
 
+        //메서드 호출 순서는 상관 없다
         initData()
         setToolBar()
         floatButton()
@@ -44,45 +49,46 @@ class MainActivity : AppCompatActivity() {
 
     fun initData(){
         var contract = ActivityResultContracts.StartActivityForResult()
-        animalInputActivitylauncher = registerForActivityResult(contract){
-            when(it.resultCode){
-                RESULT_OK -> {
-                    if (it.data != null){
-                        var ani1 = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
-                            it?.data!!.getParcelableExtra("lion", LionClass::class.java)
-                        }else{
-                            it?.data!!.getParcelableExtra<LionClass>("lion")
-                        }
-                        lionList.add(ani1!!)
-                        activityMainBinding.recyclerViewMain.adapter?.notifyDataSetChanged()
-
-                        //Log.e("test1234", "$ani1")
-                    }
-
+        animalInputActivitylauncher = registerForActivityResult(contract) { result ->
+            if (result.resultCode == RESULT_OK && result.data != null) {
+                var ani1 = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    result.data!!.getParcelableExtra("obj1", LionClass::class.java)
+                } else {
+                    result.data!!.getParcelableExtra<LionClass>("obj1")
                 }
-                RESULT_CANCELED -> {
-                    if (it.data != null){
-                        var ani2 = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
-                            it?.data!!.getParcelableExtra("tiger", TigerClass::class.java)
-                        }else{
-                            it?.data!!.getParcelableExtra<TigerClass>("tiger")
-                        }
-                        tigerList.add(ani2!!)
-                        activityMainBinding.recyclerViewMain.adapter?.notifyDataSetChanged()
-                    }
+                if (ani1 != null) {
+                    lionList.add(ani1)
+                    activityMainBinding.recyclerViewMain.adapter?.notifyDataSetChanged()
                 }
-                RESULT_FIRST_USER -> {
-                    if (it.data != null){
-                        var ani3 = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
-                            it?.data!!.getParcelableExtra("giraffe", GiraffeClass::class.java)
-                        }else{
-                            it?.data!!.getParcelableExtra<GiraffeClass>("giraffe")
-                        }
-                        giraffeList.add(ani3!!)
-                        activityMainBinding.recyclerViewMain.adapter?.notifyDataSetChanged()
-                    }
+
+                var ani2 = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    result.data!!.getParcelableExtra("obj2", TigerClass::class.java)
+                } else {
+                    result.data!!.getParcelableExtra<TigerClass>("obj2")
+                }
+                if (ani2 != null) {
+                    tigerList.add(ani2)
+                    activityMainBinding.recyclerViewMain.adapter?.notifyDataSetChanged()
+                }
+
+                var ani3 = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    result.data!!.getParcelableExtra("obj3", GiraffeClass::class.java)
+                } else {
+                    result.data!!.getParcelableExtra<GiraffeClass>("obj3")
+                }
+                if (ani3 != null) {
+                    giraffeList.add(ani3)
+                    activityMainBinding.recyclerViewMain.adapter?.notifyDataSetChanged()
                 }
             }
+        }
+
+
+
+
+
+        var contract2 = ActivityResultContracts.StartActivityForResult()
+        animalInfoActivitylauncher = registerForActivityResult(contract2){
 
         }
 
@@ -104,11 +110,15 @@ class MainActivity : AppCompatActivity() {
     fun floatButton(){
         activityMainBinding.apply {
             fabMainAdd.setOnClickListener {
-                var newIntent = Intent(this@MainActivity, InputAnimalActivity::class.java)
-                animalInputActivitylauncher.launch(newIntent)
+                //InputAnimalActivity를 실행
+                var inputIntent = Intent(this@MainActivity, InputAnimalActivity::class.java)
+                animalInputActivitylauncher.launch(inputIntent)
             }
         }
     }
+
+
+
 
     fun initView(){
         activityMainBinding.apply {
@@ -124,8 +134,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun showDiaLog(title:String, message:String){
+        var viewDiaLog = MaterialAlertDialogBuilder(this).apply {
+            setTitle(title)
+            setMessage(message)
+
+        }
+    }
+
     //어댑터 class 생성
     inner class RecyclerviewAdapter : RecyclerView.Adapter<RecyclerviewAdapter.ViewHolderClass>(){
+
+        var animalList = mutableListOf<AnimalClass>()
 
         //viewHolderClass 생성
         inner class ViewHolderClass(rowMainBinding: RowMainBinding) : RecyclerView.ViewHolder(rowMainBinding.root){
@@ -139,6 +159,13 @@ class MainActivity : AppCompatActivity() {
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 )
+
+                //recyclerView를 클릭했을 때!
+                this.rowMainBinding.root.setOnClickListener {
+                   var infoIntent = Intent(this@MainActivity, AnimalInfoActivity::class.java)
+                    infoIntent.putExtra("str1", animalList[adapterPosition])
+                    animalInfoActivitylauncher.launch(infoIntent)
+                }
             }
         }
 
@@ -152,12 +179,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun getItemCount(): Int {
-            return lionList.size
-            return giraffeList.size
-            return tigerList.size
+            return lionList.size + tigerList.size + giraffeList.size
         }
 
         override fun onBindViewHolder(holder: ViewHolderClass, position: Int) {
+            //뷰 타입에 따라 데이터를 바인딩
+            animalList.get(position)
+            holder.rowMainBinding.textViewRowMainName.text = animalList[position].name
+            holder.rowMainBinding.imageViewRowMainType.setImageResource(animalList[position].uriImage)
 
         }
 

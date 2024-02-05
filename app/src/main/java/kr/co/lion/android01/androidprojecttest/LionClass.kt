@@ -3,9 +3,15 @@ package kr.co.lion.android01.androidprojecttest
 import android.os.Parcel
 import android.os.Parcelable
 
-class LionClass(var name:String?, var age:Int, var fair:Int, var gender:String?): Parcelable {
+class LionClass(
+    override var name: String?,
+    override var age: Int,
+    override var uriImage: Int = R.drawable.lion,
+    var fair:Int,
+    var gender:String?) : AnimalClass(), Parcelable{
     constructor(parcel: Parcel) : this(
         parcel.readString(),
+        parcel.readInt(),
         parcel.readInt(),
         parcel.readInt(),
         parcel.readString()
@@ -15,6 +21,7 @@ class LionClass(var name:String?, var age:Int, var fair:Int, var gender:String?)
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
         parcel.writeInt(age)
+        parcel.writeInt(uriImage)
         parcel.writeInt(fair)
         parcel.writeString(gender)
     }
