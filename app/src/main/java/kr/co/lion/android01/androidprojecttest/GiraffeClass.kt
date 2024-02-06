@@ -6,9 +6,9 @@ import android.os.Parcelable
 class GiraffeClass(
     override var name: String?,
     override var age: Int,
-    override var uriImage: Int = R.drawable.giraffe,
+    override var uriImage: Int,
     var neck:Int,
-    var run:Int) : AnimalClass(), Parcelable{
+    var run:Int) : AnimalClass(name, age, uriImage), Parcelable{
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readInt(),

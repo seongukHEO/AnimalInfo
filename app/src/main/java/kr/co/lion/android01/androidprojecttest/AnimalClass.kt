@@ -3,7 +3,7 @@ package kr.co.lion.android01.androidprojecttest
 import android.os.Parcel
 import android.os.Parcelable
 
-open class AnimalClass(open var name:String?, open var age:Int, open var uriImage:Int) : Parcelable {
+open class AnimalClass(open val name:String?, open val age:Int, open val uriImage:Int) :Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readInt(),
@@ -30,6 +30,4 @@ open class AnimalClass(open var name:String?, open var age:Int, open var uriImag
             return arrayOfNulls(size)
         }
     }
-
 }
-

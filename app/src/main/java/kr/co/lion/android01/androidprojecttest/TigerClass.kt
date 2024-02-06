@@ -6,7 +6,7 @@ import android.os.Parcelable
 class TigerClass(
     override var name: String?,
     override var age: Int,
-    override var uriImage: Int = R.drawable.tiger,
+    override var uriImage: Int,
     var stripe:Int,
     var weight:Double) : AnimalClass(name, age, uriImage), Parcelable{
     constructor(parcel: Parcel) : this(

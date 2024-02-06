@@ -4,6 +4,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -12,6 +13,8 @@ import kr.co.lion.android01.androidprojecttest.databinding.ActivityInputAnimalBi
 
 class InputAnimalActivity : AppCompatActivity() {
     lateinit var activityInputAnimalBinding:ActivityInputAnimalBinding
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +39,7 @@ class InputAnimalActivity : AppCompatActivity() {
     }
 
     fun setToolBar(){
-        
+
         //툴바 설정
         activityInputAnimalBinding.apply {
             materialToolbar2.apply {
@@ -58,12 +61,14 @@ class InputAnimalActivity : AppCompatActivity() {
                             R.id.lionButton -> {
                                 var str1 = textFieldInputName.text.toString()
                                 var str2tt = textFieldInputAge.text.toString()
+                                var uri = R.drawable.lion
                                 var str3tt = textFieldInputHairCount.text.toString()
                                 var str4 = when(toggleGroup2.checkedButtonId){
                                     R.id.buttonGender1 -> "암컷입니다"
                                     R.id.buttonInputGender2 -> "수컷입니다"
                                     else -> ""
                                 }
+                                var str5 = R.drawable.lion
                                 if (str1.isEmpty()){
                                     showDiaLog("이름 오류", "이름을 입력해주세요")
                                 }else if (str2tt.isEmpty()){
@@ -77,12 +82,15 @@ class InputAnimalActivity : AppCompatActivity() {
                                     var str2 = str2tt.toInt()
                                     var str3 = str3tt.toInt()
 
-                                    var lion = LionClass(str1, str2, str3, str4)
+
+
+                                    var lion = LionClass(str1, str2, uri, str3, str4)
 
                                     var newIntent = Intent()
                                     newIntent.putExtra("obj1", lion)
                                     setResult(RESULT_OK, newIntent)
                                     finish()
+
                                 }
 
 
@@ -90,6 +98,7 @@ class InputAnimalActivity : AppCompatActivity() {
                             R.id.tigerButton -> {
                                 var t1 = textFieldInputName.text.toString()
                                 var t2str = textFieldInputAge.text.toString()
+                                var uri = R.drawable.tiger
                                 var t3str = textFieldInputLineCount.text.toString()
                                 var t4str = sliderInputWeight.value.toString()
 
@@ -107,7 +116,7 @@ class InputAnimalActivity : AppCompatActivity() {
                                     var t4 = t4str.toDouble()
 
 
-                                    var tiger = TigerClass(t1, t2, t3, t4)
+                                    var tiger = TigerClass(t1, t2, uri, t3, t4)
 
                                     var newIntent2 = Intent()
                                     newIntent2.putExtra("obj2", tiger)
@@ -119,6 +128,7 @@ class InputAnimalActivity : AppCompatActivity() {
                             R.id.giraffeButton -> {
                                 var t5 = textFieldInputName.text.toString()
                                 var t6str = textFieldInputAge.text.toString()
+                                var uri = R.drawable.giraffe
                                 var t7str = textFieldInputNeckLength.text.toString()
                                 var t8str = textFieldInoutRunSpeed.text.toString()
 
@@ -136,7 +146,7 @@ class InputAnimalActivity : AppCompatActivity() {
                                     var t7 = t7str.toInt()
                                     var t8 = t8str.toInt()
 
-                                    var giraffe = GiraffeClass(t5, t6, t7, t8)
+                                    var giraffe = GiraffeClass(t5, t6, uri, t7, t8)
 
                                     var newIntent3 = Intent()
                                     newIntent3.putExtra("obj3", giraffe)
