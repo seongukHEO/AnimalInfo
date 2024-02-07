@@ -1,18 +1,20 @@
 package kr.co.lion.androidproject1test
 
 import android.content.Context
+import android.content.DialogInterface
 import android.os.SystemClock
 import android.view.View
 import android.view.Window
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kr.co.lion.android01.androidprojecttest.AnimalClass
 import kotlin.concurrent.thread
 
 class Util {
-    var animalList = mutableListOf<AnimalClass>()
 
     companion object {
+        var animalList = mutableListOf<AnimalClass>()
         // 포커스를 주고 키보드를 올려주는 메서드
         //키보드를 올린다
         fun showSoftInput(view: View, context: Context) {
@@ -38,6 +40,13 @@ class Util {
                     0
                 );
             }
+        }
+        fun showDiaLog(context: Context, title:String, message:String, listener:(DialogInterface, Int) -> Unit){
+            var viewDiaLog = MaterialAlertDialogBuilder(context)
+            viewDiaLog.setTitle(title)
+            viewDiaLog.setMessage(message)
+            viewDiaLog.setPositiveButton("확인", listener)
+            viewDiaLog.show()
         }
     }
 }

@@ -15,6 +15,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import kr.co.lion.android01.androidprojecttest.databinding.ActivityMainBinding
 import kr.co.lion.android01.androidprojecttest.databinding.RowMainBinding
+import kr.co.lion.androidproject1test.AnimalType
+import kr.co.lion.androidproject1test.Util
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,6 +30,13 @@ class MainActivity : AppCompatActivity() {
         initView()
 
     }
+
+    override fun onResume() {
+        super.onResume()
+        Util.animalList
+        activityMainBinding.recyclerViewMain.adapter?.notifyDataSetChanged()
+    }
+
     //툴바 설정
     fun setToolBar() {
         activityMainBinding.apply {
@@ -105,12 +114,23 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun getItemCount(): Int {
-            return 20
+            return Util.animalList.size
         }
 
         override fun onBindViewHolder(holder: AnimalViewHolder, position: Int) {
-            holder.rowMainBinding.textViewRowMainName.text = "허성욱"
-            holder.rowMainBinding.imageViewRowMainType.setImageResource(R.drawable.lion)
+            var animal = Util.animalList[position]
+            holder.rowMainBinding.textViewRowMainName.text = animal.name
+            when(animal.type){
+                AnimalType.ANIMAL_TYPE_LION -> {
+                    holder.rowMainBinding.imageViewRowMainType.setImageResource(R.drawable.lion)
+                }
+                AnimalType.ANIMAL_TYPE_TIGER -> {
+                    holder.rowMainBinding.imageViewRowMainType.setImageResource(R.drawable.tiger)
+                }
+                AnimalType.ANIMAL_TYPE_GIRAFFE -> {
+                    holder.rowMainBinding.imageViewRowMainType.setImageResource(R.drawable.giraffe)
+                }
+            }
         }
     }
 
