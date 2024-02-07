@@ -8,7 +8,7 @@
     tools:context=".AnimalInfoActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/materialToolbar"
+        android:id="@+id/toolbarAnimalInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
@@ -31,12 +31,11 @@
                 android:orientation="vertical" >
 
                 <TextView
-                    android:id="@+id/textViewShowInfo"
+                    android:id="@+id/animalInfoText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
-
 </LinearLayout>
