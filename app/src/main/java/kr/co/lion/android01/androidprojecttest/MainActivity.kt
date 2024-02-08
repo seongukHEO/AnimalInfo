@@ -101,6 +101,7 @@ class MainActivity : AppCompatActivity() {
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 )
+
             }
         }
 
@@ -130,6 +131,12 @@ class MainActivity : AppCompatActivity() {
                 AnimalType.ANIMAL_TYPE_GIRAFFE -> {
                     holder.rowMainBinding.imageViewRowMainType.setImageResource(R.drawable.giraffe)
                 }
+            }
+            holder.rowMainBinding.root.setOnClickListener {
+                var newintent = Intent(this@MainActivity, AnimalInfoActivity::class.java)
+                //자리값으로 하기 때문에 position을 입력해준다
+                newintent.putExtra("position", position)
+                startActivity(newintent)
             }
         }
     }

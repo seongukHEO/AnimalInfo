@@ -191,8 +191,8 @@ class InputAnimalActivity : AppCompatActivity() {
                     lion.age = textFieldInputAge.text.toString().toInt()
                     //성별을 분기한다
                     lion.gender = when(toggleGroup2.checkedButtonId){
-                        R.id.buttonGender1 -> LION_GENDER.LION_GENDER1
-                        R.id.buttonInputGender2 -> LION_GENDER.LION_GENDER2
+                        R.id.buttonGender1 -> LION_GENDER.LION_GENDER2
+                        R.id.buttonInputGender2 -> LION_GENDER.LION_GENDER1
                         else -> LION_GENDER.LION_GENDER1
                     }
                     lion.fairCount = textFieldInputHairCount.text.toString().toInt()
@@ -212,7 +212,7 @@ class InputAnimalActivity : AppCompatActivity() {
                     var giraffe = GiraffeClass()
                     giraffe.type = AnimalType.ANIMAL_TYPE_GIRAFFE
                     giraffe.name = textFieldInputName.text.toString()
-                    giraffe.age = textFieldInputAge.toString().toInt()
+                    giraffe.age = textFieldInputAge.text.toString().toInt()
                     giraffe.neck = textFieldInputNeckLength.text.toString().toInt()
                     giraffe.runSpeed = textFieldInoutRunSpeed.text.toString().toInt()
                     Util.animalList.add(giraffe)
