@@ -71,7 +71,7 @@ class ModifyInfoActivity : AppCompatActivity() {
             var animal = Util.animalList[obj5]
             //공통
             textFieldModifyName.setText("${animal.name}")
-            textFieldModifyAge.setText("${animal.age}살")
+            textFieldModifyAge.setText("${animal.age}")
 
             //타입별로 분기
             when(animal.type){
@@ -80,7 +80,7 @@ class ModifyInfoActivity : AppCompatActivity() {
                     containerModifyType1.isVisible = true
                     //animal을 형 변환 한다
                     var lion = animal as LionClass
-                    textFieldModifyHairCount.setText("${lion.fairCount}개")
+                    textFieldModifyHairCount.setText("${lion.fairCount}")
                     when(lion.gender){
                         LION_GENDER.LION_GENDER1 -> {
                             toggleModifyGroup2.check(R.id.buttonModifyGender2)
@@ -94,7 +94,7 @@ class ModifyInfoActivity : AppCompatActivity() {
                     //타입에 맞는 화면을 보이게한다
                     containerModifyType2.isVisible = true
                     var tiger = animal as TigerClass
-                    textFieldModifyLineCount.setText("${tiger.lineCount}개")
+                    textFieldModifyLineCount.setText("${tiger.lineCount}")
                     sliderModifyWeight.value = tiger.weight.toFloat()
 
                 }
@@ -103,8 +103,8 @@ class ModifyInfoActivity : AppCompatActivity() {
                     containerModifyType3.isVisible = true
                     //형변환
                     var giraffe = animal as GiraffeClass
-                    textFieldModifyNeckLength.setText("${giraffe.neck}cm")
-                    textFieldModifyRunSpeed.setText("${giraffe.runSpeed}km")
+                    textFieldModifyNeckLength.setText("${giraffe.neck}")
+                    textFieldModifyRunSpeed.setText("${giraffe.runSpeed}")
 
                 }
             }
@@ -121,36 +121,22 @@ class ModifyInfoActivity : AppCompatActivity() {
             animal.age = textFieldModifyAge.text.toString().toInt()
 
             //타입별로 분기한다
-            when(animal.type){
-                AnimalType.ANIMAL_TYPE_LION -> {
-                    //형변환
-                    if (animal is LionClass){
-                        animal.fairCount = textFieldModifyHairCount.text.toString().toInt()
-                        when(animal.gender){
-                            LION_GENDER.LION_GENDER1 -> {
-                                toggleModifyGroup2.check(R.id.buttonModifyGender2)
-                            }
-                            LION_GENDER.LION_GENDER2 -> {
-                                toggleModifyGroup2.check(R.id.buttonModifyGender1)
-                            }
-                        }
-                    }
-                }
-                AnimalType.ANIMAL_TYPE_TIGER -> {
-                    //형변환
-                    if (animal is TigerClass){
-                        animal.lineCount = textFieldModifyLineCount.text.toString().toInt()
-                        animal.weight = sliderModifyWeight.value.toInt()
-                    }
 
+            if (animal is LionClass) {
+                animal.fairCount = textFieldModifyHairCount.text.toString().toInt()
+                animal.gender = when(toggleModifyGroup2.checkedButtonId){
+                    R.id.buttonModifyGender1 -> LION_GENDER.LION_GENDER2
+                    R.id.buttonModifyGender2 -> LION_GENDER.LION_GENDER1
+                    else -> LION_GENDER.LION_GENDER1
                 }
-                AnimalType.ANIMAL_TYPE_GIRAFFE -> {
-                    if (animal is GiraffeClass){
-                        animal.neck = textFieldModifyNeckLength.text.toString().toInt()
-                        animal.runSpeed = textFieldModifyRunSpeed.text.toString().toInt()
-                    }
-
-                }
+            }
+            else if (animal is TigerClass){
+                animal.lineCount = textFieldModifyLineCount.text.toString().toInt()
+                animal.weight = sliderModifyWeight.value.toInt()
+            }
+            else if (animal is GiraffeClass){
+                animal.neck = textFieldModifyNeckLength.text.toString().toInt()
+                animal.runSpeed = textFieldModifyRunSpeed.text.toString().toInt()
             }
 
         }
@@ -184,10 +170,8 @@ class ModifyInfoActivity : AppCompatActivity() {
                         Util.showDiaLog(this@ModifyInfoActivity, "털 갯수 입력 오류", "털 갯수를 입력해주세요"){ dialogInterface: DialogInterface, i: Int ->
                             Util.showSoftInput(textFieldModifyHairCount, this@ModifyInfoActivity)
                         }
-
+                        return
                     }
-                    toggleModifyGroup2.check(R.id.buttonModifyGender1)
-                    return
                 }
                 AnimalType.ANIMAL_TYPE_TIGER -> {
                     var line = textFieldModifyLineCount.text.toString()
@@ -195,8 +179,9 @@ class ModifyInfoActivity : AppCompatActivity() {
                         Util.showDiaLog(this@ModifyInfoActivity, "줄무늬 갯수 오류", "줄무늬 갯수를 입력해주세요"){ dialogInterface: DialogInterface, i: Int ->
                             Util.showSoftInput(textFieldModifyLineCount, this@ModifyInfoActivity)
                         }
+                        return
                     }
-                    return
+
                 }
                 AnimalType.ANIMAL_TYPE_GIRAFFE -> {
                     var neck = textFieldModifyNeckLength.text.toString()
@@ -204,13 +189,17 @@ class ModifyInfoActivity : AppCompatActivity() {
                         Util.showDiaLog(this@ModifyInfoActivity, "목의 길이 오류", "목의 길이를 입력해주세요"){ dialogInterface: DialogInterface, i: Int ->
                             Util.showSoftInput(textFieldModifyNeckLength, this@ModifyInfoActivity)
                         }
+                        return
                     }
+
                     var run = textFieldModifyRunSpeed.text.toString()
                     if (run.trim().isEmpty()){
                         Util.showDiaLog(this@ModifyInfoActivity, "달리는 속도 입력 오류", "달리는 속도를 입력해주세요"){ dialogInterface: DialogInterface, i: Int ->
                             Util.showSoftInput(textFieldModifyRunSpeed, this@ModifyInfoActivity)
                         }
+                        return
                     }
+
 
                 }
             }

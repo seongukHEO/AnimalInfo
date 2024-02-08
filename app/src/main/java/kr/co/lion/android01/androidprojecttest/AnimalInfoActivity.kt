@@ -51,6 +51,10 @@ class AnimalInfoActivity : AppCompatActivity() {
                             startActivity(newIntent)
                         }
                         R.id.menu_delect -> {
+                            var inin = intent.getIntExtra("position" , 0)
+                            //와 여기서 삭제를 하는구나,,,
+                            Util.animalList.removeAt(inin)
+                            finish()
 
                         }
                     }
@@ -70,8 +74,8 @@ class AnimalInfoActivity : AppCompatActivity() {
                 var animal = Util.animalList[info]
                 //공통
                 text = "동물 타입 : ${animal.type.str}\n"
-                append("이름 : ${animal.name}살\n")
-                append("나이 : ${animal.age}\n")
+                append("이름 : ${animal.name}\n")
+                append("나이 : ${animal.age}살\n")
 
                 //동물의 타입으로 분기한다
                 when(animal.type){

@@ -21,10 +21,15 @@ import kr.co.lion.androidproject1test.Util
 class MainActivity : AppCompatActivity() {
 
     lateinit var activityMainBinding: ActivityMainBinding
+
+    //info에서 삭제하고 올때
+    lateinit var animalInfoActivitylauncher:ActivityResultLauncher<Intent>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
+        setView()
         setToolBar()
         clickFloatButton()
         initView()
@@ -35,6 +40,14 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         Util.animalList
         activityMainBinding.recyclerViewMain.adapter?.notifyDataSetChanged()
+    }
+
+    //뷰 설정
+    fun setView(){
+        var contract = ActivityResultContracts.StartActivityForResult()
+        animalInfoActivitylauncher = registerForActivityResult(contract){
+
+        }
     }
 
     //툴바 설정
@@ -136,7 +149,7 @@ class MainActivity : AppCompatActivity() {
                 var newintent = Intent(this@MainActivity, AnimalInfoActivity::class.java)
                 //자리값으로 하기 때문에 position을 입력해준다
                 newintent.putExtra("position", position)
-                startActivity(newintent)
+                animalInfoActivitylauncher.launch(newintent)
             }
         }
     }
