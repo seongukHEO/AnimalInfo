@@ -1,11 +1,9 @@
 package kr.co.lion.android01.androidprojecttest
 
+import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Color
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,6 +15,7 @@ import kr.co.lion.android01.androidprojecttest.databinding.ActivityMainBinding
 import kr.co.lion.android01.androidprojecttest.databinding.RowMainBinding
 import kr.co.lion.androidproject1test.AnimalType
 import kr.co.lion.androidproject1test.Util
+import kr.co.lion.androidproject1test.showFilterDiaLog
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,6 +23,13 @@ class MainActivity : AppCompatActivity() {
 
     //info에서 삭제하고 올때
     lateinit var animalInfoActivitylauncher:ActivityResultLauncher<Intent>
+
+    //이제 필터를 써야하기 때문에 여기 있는 값들을 담을 저장소
+    var recycleranimal = mutableListOf<AnimalClass>()
+    // 현재 항목을 구성하기 위해 사용한 객체가 Util.animalList의 몇번째 객체인지를 담을 리스트
+    var recyclerViewIndexList = mutableListOf<Int>()
+    //현재 필터의 상태 설정
+    var filterDiaLog = showFilterDiaLog.FILTER_TYPE_ALL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +44,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        Util.animalList
+        activityMainBinding.apply {
+            setDiaLogEvent()
+        }
         activityMainBinding.recyclerViewMain.adapter?.notifyDataSetChanged()
     }
 
@@ -63,6 +71,7 @@ class MainActivity : AppCompatActivity() {
                 setOnMenuItemClickListener {
                     when(it.itemId){
                         R.id.menu_item_main_filter -> {
+                            showFilterdiaLog()
 
                         }
                     }
@@ -128,11 +137,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun getItemCount(): Int {
-            return Util.animalList.size
+            return recycleranimal.size
         }
 
         override fun onBindViewHolder(holder: AnimalViewHolder, position: Int) {
-            var animal = Util.animalList[position]
+            var animal = recycleranimal[position]
             holder.rowMainBinding.textViewRowMainName.text = animal.name
             when(animal.type){
                 AnimalType.ANIMAL_TYPE_LION -> {
@@ -148,8 +157,85 @@ class MainActivity : AppCompatActivity() {
             holder.rowMainBinding.root.setOnClickListener {
                 var newintent = Intent(this@MainActivity, AnimalInfoActivity::class.java)
                 //자리값으로 하기 때문에 position을 입력해준다
-                newintent.putExtra("position", position)
+                newintent.putExtra("position", recyclerViewIndexList[position])
                 animalInfoActivitylauncher.launch(newintent)
+            }
+        }
+    }
+    fun showFilterdiaLog(){
+        var obj = MaterialAlertDialogBuilder(this@MainActivity)
+        obj.setTitle("필터 선택")
+
+        //항목
+        var itenArray = arrayOf("전체", "사자", "호랑이", "기린")
+        obj.setItems(itenArray){ dialogInterface: DialogInterface, i: Int ->
+            //사용자가 선택한 DiaLog의 항목 순서 값으로 분기한다 즉 첫번째 버튼은 0번, 2번째 버튼은 1번
+            filterDiaLog = when(i){
+                0 -> showFilterDiaLog.FILTER_TYPE_ALL
+                1 -> showFilterDiaLog.FILTER_TYPE_LION
+                2 -> showFilterDiaLog.FILTER_TYPE_TIGER
+                3 -> showFilterDiaLog.FILTER_TYPE_GIRAFFE
+                else -> showFilterDiaLog.FILTER_TYPE_ALL
+            }
+            //데이터를 새로 담는다?
+            setDiaLogEvent()
+
+            //리사이클러뷰를 갱신한다
+            activityMainBinding.recyclerViewMain.adapter?.notifyDataSetChanged()
+        }
+        obj.setPositiveButton("확인", null)
+        obj.show()
+
+    }
+    //다이알로그 이벤트 주기
+    fun setDiaLogEvent(){
+        //우선 싹 비워준다
+        recycleranimal.clear()
+        recyclerViewIndexList.clear()
+        //타입별로 분기한다
+        when(filterDiaLog){
+            showFilterDiaLog.FILTER_TYPE_ALL -> {
+                //모두 담는다?
+                var index = 0
+                Util.animalList.forEach {
+                    recycleranimal.add(it)
+                    recyclerViewIndexList.add(index)
+                    index++
+                }
+
+            }
+            showFilterDiaLog.FILTER_TYPE_LION -> {
+                var index = 0
+                Util.animalList.forEach {
+                    if (it.type == AnimalType.ANIMAL_TYPE_LION){
+                        recycleranimal.add(it)
+                        recyclerViewIndexList.add(index)
+                    }
+                    index++
+                }
+
+            }
+            showFilterDiaLog.FILTER_TYPE_TIGER -> {
+                var index = 0
+                Util.animalList.forEach {
+                    if (it.type == AnimalType.ANIMAL_TYPE_TIGER){
+                        recycleranimal.add(it)
+                        recyclerViewIndexList.add(index)
+                    }
+                    index++
+                }
+
+            }
+            showFilterDiaLog.FILTER_TYPE_GIRAFFE -> {
+                var index = 0
+                Util.animalList.forEach {
+                    if (it.type == AnimalType.ANIMAL_TYPE_GIRAFFE){
+                        recycleranimal.add(it)
+                        recyclerViewIndexList.add(index)
+                    }
+                    index++
+                }
+
             }
         }
     }

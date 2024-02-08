@@ -59,3 +59,13 @@ class Util {
         LION_GENDER1(0, "남자"),
         LION_GENDER2(0, "여자")
     }
+
+//자주 써야하는 필터 다이아 로그를 enum Class로 만들어준다
+    enum class showFilterDiaLog(var num:Int, var str:String){
+        //각 항목들을 작성해준다
+        FILTER_TYPE_ALL(0, "전체"),
+        FILTER_TYPE_LION(0, "사자"),
+        FILTER_TYPE_TIGER(0, "호랑이"),
+        FILTER_TYPE_GIRAFFE(0, "기린")
+
+    }
