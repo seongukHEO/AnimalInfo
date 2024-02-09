@@ -196,44 +196,34 @@ class MainActivity : AppCompatActivity() {
         when(filterDiaLog){
             showFilterDiaLog.FILTER_TYPE_ALL -> {
                 //모두 담는다?
-                var index = 0
-                Util.animalList.forEach {
-                    recycleranimal.add(it)
+                Util.animalList.forEachIndexed { index, animalClass ->
+                    recycleranimal.add(animalClass)
                     recyclerViewIndexList.add(index)
-                    index++
                 }
-
             }
             showFilterDiaLog.FILTER_TYPE_LION -> {
-                var index = 0
-                Util.animalList.forEach {
-                    if (it.type == AnimalType.ANIMAL_TYPE_LION){
-                        recycleranimal.add(it)
+                Util.animalList.forEachIndexed { index, animalClass ->
+                    if (animalClass.type == AnimalType.ANIMAL_TYPE_LION){
+                        recycleranimal.add(animalClass)
                         recyclerViewIndexList.add(index)
                     }
-                    index++
                 }
-
             }
             showFilterDiaLog.FILTER_TYPE_TIGER -> {
-                var index = 0
-                Util.animalList.forEach {
-                    if (it.type == AnimalType.ANIMAL_TYPE_TIGER){
-                        recycleranimal.add(it)
+                Util.animalList.forEachIndexed { index, animalClass ->
+                    if (animalClass.type == AnimalType.ANIMAL_TYPE_TIGER){
+                        recycleranimal.add(animalClass)
                         recyclerViewIndexList.add(index)
                     }
-                    index++
                 }
-
             }
             showFilterDiaLog.FILTER_TYPE_GIRAFFE -> {
-                var index = 0
-                Util.animalList.forEach {
-                    if (it.type == AnimalType.ANIMAL_TYPE_GIRAFFE){
-                        recycleranimal.add(it)
+                Util.animalList.forEachIndexed { index, animalClass ->
+                    if (animalClass.type == AnimalType.ANIMAL_TYPE_GIRAFFE){
+                        recycleranimal.add(animalClass)
                         recyclerViewIndexList.add(index)
                     }
-                    index++
+
                 }
 
             }

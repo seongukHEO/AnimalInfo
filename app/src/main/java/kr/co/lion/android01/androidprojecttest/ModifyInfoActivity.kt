@@ -42,7 +42,6 @@ class ModifyInfoActivity : AppCompatActivity() {
                     when(it.itemId){
                         R.id.end_menu -> {
                             checkOK()
-                            finish()
 
                         }
                     }
